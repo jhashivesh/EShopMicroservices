@@ -1,0 +1,16 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "catalog.api": "StartDebugging",
+        "basket.api": "StartDebugging",
+        "yarpapigateway": "StartDebugging",
+        "ordering.api": "StartDebugging",
+        "discount.grpc": "StartDebugging",
+        "identityservice": "StartDebugging"
+      }
+    }
+  }
+}
