@@ -12,6 +12,9 @@ export class ShopService {
   private http = inject(HttpClient);
 
   getProducts() {
+    console.log(
+      'getProductsUrl::' + this.baseUrl + 'catalog-service/products/'
+    );
     return this.http.get<Pagination<Product>>(
       this.baseUrl + 'catalog-service/products'
     );

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UserManager, User, UserManagerSettings } from 'oidc-client';
-import { Constants } from '../../shared/constants';
 import { Subject } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -13,13 +13,14 @@ export class AuthService {
   public loginChanged = this._loginChangedSubject.asObservable();
 
   private get idpSettings(): UserManagerSettings {
+    console.log('clientUrl::' + environment.clientUrl);
     return {
-      authority: Constants.idpAuthority,
-      client_id: Constants.clientId,
-      redirect_uri: `${Constants.clientRoot}/signin-callback`,
+      authority: environment.idpUrl,
+      client_id: environment.clientId,
+      redirect_uri: `${environment.clientUrl}/signin-callback`,
       scope: 'openid profile ecommerceApp',
       response_type: 'code',
-      post_logout_redirect_uri: `${Constants.clientRoot}/signout-callback`,
+      post_logout_redirect_uri: `${environment.clientUrl}/signout-callback`,
       loadUserInfo: true,
     };
   }

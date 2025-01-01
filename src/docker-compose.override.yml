@@ -72,7 +72,7 @@ services:
       - IdentityServiceUrl=http://identity
       - ConnectionStrings__Database=Server=catalogdb;Port=5432;Database=CatalogDb;User Id=postgres;Password=postgres;Include Error Detail=true
     depends_on:
-        - catalogdb
+      - catalogdb
     ports:
       - "5000:80"
       - "5050:443"
@@ -173,4 +173,23 @@ services:
       - "5005:80"
     command: 
       - start-dev
+
+  webapp:
+    container_name: webapp  
+    ports:
+      - "4200:80"
+      - "4201:443"    
+    environment:     
+      - CLIENT_URL=http://localhost:4200
+      - API_URL=http://localhost:5004/
+      - IDP_URL=http://localhost:5005
+
+
+
+   
+      
+   
+    
+
+    
 

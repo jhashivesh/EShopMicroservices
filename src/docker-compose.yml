@@ -13,6 +13,7 @@ services:
     image: redis
   messagebroker:
     image: rabbitmq:management
+    
 
   catalog.api:
     image: ${DOCKER_REGISTRY-}catalogapi
@@ -50,10 +51,17 @@ services:
       context: IdentityService
       dockerfile: Dockerfile
 
+  webapp:
+    image: ${DOCKER_REGISTRY-}webapp
+    build:
+      context: WebApps/Shopping.Web
+      dockerfile: Dockerfile
+
 volumes:
   postgres_catalog:
   postgres_basket:
   postgres_identity:
+
 
 
 
