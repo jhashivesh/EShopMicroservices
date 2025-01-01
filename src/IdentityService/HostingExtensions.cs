@@ -11,6 +11,13 @@ internal static class HostingExtensions
 {
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
     {
+        Log.Logger = new LoggerConfiguration()
+                        .WriteTo.Console()
+                        .CreateBootstrapLogger();
+
+        Log.Information("Starting up");
+
+
         builder.Services.AddRazorPages();
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -28,6 +35,7 @@ internal static class HostingExtensions
                 options.Events.RaiseInformationEvents = true;
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
+                Log.Information("IssuerUri:" + builder.Configuration["IssuerUri"]);
                 options.IssuerUri = builder.Configuration["IssuerUri"];
 
                 // see https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/

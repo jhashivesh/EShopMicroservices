@@ -14,6 +14,7 @@ export class AuthService {
 
   private get idpSettings(): UserManagerSettings {
     console.log('clientUrl::' + environment.clientUrl);
+    console.log('idpUrl::' + environment.idpUrl);
     return {
       authority: environment.idpUrl,
       client_id: environment.clientId,

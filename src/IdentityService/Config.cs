@@ -47,8 +47,7 @@ public static class Config
 
                 RedirectUris = new List<string>
                     {
-                        "http://localhost:4200/signin-callback",
-                        "http://localhost:4200/assets/silent-callback.html",
+                        config["ClientApp"] + "/signin-callback",
                     },
                 RequirePkce = true,
                 AllowAccessTokensViaBrowser = true,
@@ -61,14 +60,14 @@ public static class Config
                     IdentityServerConstants.StandardScopes.Profile,
                     "ecommerceApp"
                 },
-                AllowedCorsOrigins = {"http://localhost:4200", "https://localhost:4200"},
+                AllowedCorsOrigins = {config["ClientApp"]!},
                 RequireClientSecret = false,
                 AllowRememberConsent = false,
                 RequireConsent = false,
                 AccessTokenLifetime = 3600,
                 PostLogoutRedirectUris = new List<string>
                 {
-                    "http://localhost:4200/signout-callback",
+                    config["ClientApp"] + "/signout-callback",
                 },
                 ClientSecrets = new List<Secret>
                 {

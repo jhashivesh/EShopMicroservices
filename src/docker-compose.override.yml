@@ -160,11 +160,12 @@ services:
   identity:
     container_name: identity
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80,
       - ASPNETCORE_HTTP_PORTS=8080
+      # This issuer URI is used to validate the audience of the JWT token and must match the one mentioned in auth.service.ts file of the Angular project
       - IssuerUri=http://localhost:5005
-      - ClientApp=https://localhost:4200
+      - ClientApp=http://localhost:4200
       - ConnectionStrings__DefaultConnection=Server=identitydb;Port=5432;Database=IdentityDb;User Id=postgres;Password=postgres;Include Error Detail=true      
     restart: always    
     depends_on:
