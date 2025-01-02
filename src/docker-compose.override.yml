@@ -142,17 +142,15 @@ services:
   yarpapigateway:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
+      - ASPNETCORE_URLS=http://+:80
       - IdentityServiceUrl=http://identity
-      - ClientApp=https://localhost:4200
+      - ClientApp=http://app.ecommerce.local
+      - VIRTUAL_HOST=api.ecommerce.local
     depends_on:
       - catalog.api
       - basket.api
       - ordering.api
-    ports:
-      - "5004:8080"
-      - "5054:8081"
+  
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
@@ -160,32 +158,40 @@ services:
   identity:
     container_name: identity
     environment:
-      - ASPNETCORE_ENVIRONMENT=Docker
-      - ASPNETCORE_URLS=http://+:80,
-      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      
       # This issuer URI is used to validate the audience of the JWT token and must match the one mentioned in auth.service.ts file of the Angular project
-      - IssuerUri=http://localhost:5005
-      - ClientApp=http://localhost:4200
-      - ConnectionStrings__DefaultConnection=Server=identitydb;Port=5432;Database=IdentityDb;User Id=postgres;Password=postgres;Include Error Detail=true      
+      - IssuerUri=http://id.ecommerce.local
+      - ClientApp=http://app.ecommerce.local
+      - ConnectionStrings__DefaultConnection=Server=identitydb;Port=5432;Database=IdentityDb;User Id=postgres;Password=postgres;Include Error Detail=true   
+      - VIRTUAL_HOST=id.ecommerce.local
     restart: always    
     depends_on:
       - identitydb
-    ports:
-      - "5005:80"
+   
     command: 
       - start-dev
 
   webapp:
-    container_name: webapp  
-    ports:
-      - "4200:80"
-      - "4201:443"    
+    container_name: webapp    
     environment:     
-      - CLIENT_URL=http://localhost:4200
-      - API_URL=http://localhost:5004/
-      - IDP_URL=http://localhost:5005
+      - CLIENT_URL=http://app.ecommerce.local
+      - API_URL=http://api.ecommerce.local/
+      - IDP_URL=http://id.ecommerce.local
+      - VIRTUAL_HOST=app.ecommerce.local
+      
 
-
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy
+    container_name: nginx-proxy
+    restart: unless-stopped
+    ports:
+      - 80:80      
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+  
+    
 
    
       

@@ -1,6 +1,7 @@
 using IdentityService.Data;
 using IdentityService.Models;
 using IdentityService.Services;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -68,6 +69,14 @@ internal static class HostingExtensions
     public static WebApplication ConfigurePipeline(this WebApplication app)
     {
         app.UseSerilogRequestLogging();
+
+        var forwardedHeaderOptions = new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+        };
+        forwardedHeaderOptions.KnownNetworks.Clear();
+        forwardedHeaderOptions.KnownProxies.Clear();
+        app.UseForwardedHeaders(forwardedHeaderOptions);
 
         if (app.Environment.IsDevelopment())
         {

@@ -14,6 +14,7 @@ RUN npm run build --omit=dev
 
 # production image, copy all files and run next
 # Define nginx for front-end server
+
 FROM nginx:1.15.8-alpine AS runner
 # Copy dist from ng build to nginx html folder
 RUN rm -rf /usr/share/nginx/html/*
