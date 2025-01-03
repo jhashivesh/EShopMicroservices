@@ -66,9 +66,7 @@ services:
   catalog.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80,
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
+      - ASPNETCORE_URLS=https://+:443;http://+:80      
       - IdentityServiceUrl=http://identity
       - ConnectionStrings__Database=Server=catalogdb;Port=5432;Database=CatalogDb;User Id=postgres;Password=postgres;Include Error Detail=true
     depends_on:
@@ -83,13 +81,11 @@ services:
   basket.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80,
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
+      - ASPNETCORE_URLS=https://+:443;http://+:80      
       - ConnectionStrings__Database=Server=basketdb;Port=5432;Database=BasketDb;User Id=postgres;Password=postgres;Include Error Detail=true
       - ConnectionStrings__Redis=distributedcache:6379
       - IdentityServiceUrl=http://identity
-      - GrpcSettings__DiscountUrl=https://discount.grpc
+      - GrpcSettings__DiscountUrl=http://discount.grpc
       - MessageBroker__Host=amqp://ecommerce-mq
       - MessageBroker__UserName=guest
       - MessageBroker__Password=guest
@@ -108,9 +104,7 @@ services:
   discount.grpc:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80,
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
+      - ASPNETCORE_URLS=https://+:443;http://+:80      
       - ConnectionStrings__Database=Data Source=discountdb
     ports:
       - "5002:80"
@@ -122,8 +116,7 @@ services:
   ordering.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
+      - ASPNETCORE_URLS=http://+:80
       - ConnectionStrings__Database=Server=orderdb;Database=OrderDb;User Id=sa;Password=Password123;Encrypt=False;TrustServerCertificate=True
       - MessageBroker__Host=amqp://ecommerce-mq:5672
       - MessageBroker__UserName=guest
@@ -144,7 +137,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
       - IdentityServiceUrl=http://identity
-      - ClientApp=http://app.ecommerce.local
+      - ClientApp=https://app.ecommerce.local
       - VIRTUAL_HOST=api.ecommerce.local
     depends_on:
       - catalog.api
@@ -162,8 +155,8 @@ services:
       - ASPNETCORE_URLS=http://+:80
       
       # This issuer URI is used to validate the audience of the JWT token and must match the one mentioned in auth.service.ts file of the Angular project
-      - IssuerUri=http://id.ecommerce.local
-      - ClientApp=http://app.ecommerce.local
+      - IssuerUri=https://id.ecommerce.local
+      - ClientApp=https://app.ecommerce.local
       - ConnectionStrings__DefaultConnection=Server=identitydb;Port=5432;Database=IdentityDb;User Id=postgres;Password=postgres;Include Error Detail=true   
       - VIRTUAL_HOST=id.ecommerce.local
     restart: always    
@@ -176,9 +169,9 @@ services:
   webapp:
     container_name: webapp    
     environment:     
-      - CLIENT_URL=http://app.ecommerce.local
-      - API_URL=http://api.ecommerce.local/
-      - IDP_URL=http://id.ecommerce.local
+      - CLIENT_URL=https://app.ecommerce.local
+      - API_URL=https://api.ecommerce.local/
+      - IDP_URL=https://id.ecommerce.local
       - VIRTUAL_HOST=app.ecommerce.local
       
 
@@ -188,8 +181,10 @@ services:
     restart: unless-stopped
     ports:
       - 80:80      
+      - 443:443
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./WebApps/Shopping.Web/ssl:/etc/nginx/certs
   
     
 
