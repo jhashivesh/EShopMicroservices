@@ -1,7 +1,11 @@
+using Common.Logging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog(Logging.ConfigureLogger);
 
 // Add services to the container.
 builder.Services.AddReverseProxy()
@@ -38,6 +42,7 @@ var app = builder.Build();
 app.UseCors("customPolicy");
 
 // Configure the HTTP request pipeline.
+app.UseSerilogRequestLogging();
 app.UseRateLimiter();
 
 app.MapReverseProxy();

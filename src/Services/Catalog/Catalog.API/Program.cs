@@ -1,11 +1,16 @@
 using Catalog.API.Data;
+using Common.Logging;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+// Serilog
+builder.Host.UseSerilog(Logging.ConfigureLogger);
+
 var assembly = typeof(Program).Assembly;
 builder.Services.AddMediatR(config =>
 {
@@ -47,7 +52,7 @@ var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapCarter();
-
+app.UseSerilogRequestLogging();
 app.UseExceptionHandler(options => { });
 
 app.UseHealthChecks("/health",
