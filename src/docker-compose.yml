@@ -13,16 +13,18 @@ services:
     image: redis
   messagebroker:
     image: rabbitmq:management
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy
     
 
   catalog.api:
-    image: ${DOCKER_REGISTRY-}catalogapi
+    image: ${DOCKER_REGISTRY-}catalog.api
     build:
       context: .
       dockerfile: Services/Catalog/Catalog.API/Dockerfile
 
   basket.api:
-    image: ${DOCKER_REGISTRY-}basketapi
+    image: ${DOCKER_REGISTRY-}basket.api
     build:
       context: .
       dockerfile: Services/Basket/Basket.API/Dockerfile
@@ -34,19 +36,19 @@ services:
       dockerfile: Dockerfile
 
   ordering.api:
-    image: ${DOCKER_REGISTRY-}orderingapi
+    image: ${DOCKER_REGISTRY-}ordering.api
     build:
       context: .
       dockerfile: Services/Ordering/Ordering.API/Dockerfile
 
   yarpapigateway:
-    image: ${DOCKER_REGISTRY-}yarpapigateway
+    image: ${DOCKER_REGISTRY-}gateway
     build:
       context: ApiGateways/YarpApiGateway
       dockerfile: Dockerfile  
 
   identity:
-    image: ${DOCKER_REGISTRY-}identityservice
+    image: ${DOCKER_REGISTRY-}identity
     build:
       context: IdentityService
       dockerfile: Dockerfile

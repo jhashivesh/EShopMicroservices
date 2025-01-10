@@ -11,10 +11,10 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["IdentityService.csproj", "."]
+COPY ["IdentityService/IdentityService.csproj", "."]
 RUN dotnet restore "./IdentityService.csproj"
 COPY . .
-WORKDIR "/src/."
+WORKDIR "/src/IdentityService"
 RUN dotnet build "./IdentityService.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
@@ -27,3 +27,8 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "IdentityService.dll"]
+
+
+# docker build -f "C:\sk\sharedwithvms\repos\EShopMicroservices\src\IdentityService\Dockerfile" --force-rm -t shiveshk/identity .
+
+#  docker push shiveshk/identity

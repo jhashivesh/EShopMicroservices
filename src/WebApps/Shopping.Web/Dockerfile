@@ -29,8 +29,8 @@ EXPOSE 80
 # When the container starts, replace the env.js with values from environment variables
 CMD ["/bin/sh",  "-c",  "envsubst < /usr/share/nginx/html/assets/env.template.js > /usr/share/nginx/html/assets/env.js && exec nginx -g 'daemon off;'"]
 
-
-## docker build -t webapp -f ./Dockerfile .
+## cd C:\sk\sharedwithvms\repos\EShopMicroservices\src\WebApps\Shopping.Web
+## docker build -t shiveshk/webapp -f ./Dockerfile .
 ## docker run -dp 4200:80 webapp
 
 ## docker compose  -f "C:\sk\sharedwithvms\repos\EShopMicroservices\src\docker-compose.yml" -f "C:\sk\sharedwithvms\repos\EShopMicroservices\src\docker-compose.override.yml" up -d

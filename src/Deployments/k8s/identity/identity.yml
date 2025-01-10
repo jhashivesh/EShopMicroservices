@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: identity-deployment
+  labels:
+    app: identity
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: identity
+  template:
+    metadata:
+      labels:
+        app: identity
+    spec:
+      containers:
+        - name: identity
+          image: shiveshk/identity:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: ASPNETCORE_URLS
+              value: http://+:80
+            - name: IssuerUri
+              valueFrom:
+                configMapKeyRef:
+                  name: identity-config
+                  key: IssuerUri
+            - name: ClientApp
+              valueFrom:
+                configMapKeyRef:
+                  name: identity-config
+                  key: ClientApp
+            - name: ConnectionStrings__DefaultConnection
+              valueFrom:
+                secretKeyRef:
+                  name: identity-secret
+                  key: connString
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: identity-np
+spec:
+  type: NodePort
+  selector:
+    app: identity
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 31602
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: identity-clusterip
+spec:
+  type: ClusterIP
+  selector:
+    app: identity
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

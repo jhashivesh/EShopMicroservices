@@ -1,0 +1,46 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-rules
+  labels:
+    name: ingress-rules
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - app.ecommerce.local
+        - api.ecommerce.local
+        - id.ecommerce.local
+      secretName: ecommerce-app-tls
+  rules:
+    - host: app.ecommerce.local
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: webapp-clusterip
+                port:
+                  number: 4200
+    - host: api.ecommerce.local
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: gateway-clusterip
+                port:
+                  number: 80
+
+    - host: id.ecommerce.local
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: identity-clusterip
+                port:
+                  number: 80

@@ -12,10 +12,11 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["YarpApiGateway.csproj", "."]
+COPY ["ApiGateways/YarpApiGateway/YarpApiGateway.csproj", "."]
+COPY ["BuildingBlocks/BuildingBlocks/BuildingBlocks.csproj", "BuildingBlocks/BuildingBlocks/"]
 RUN dotnet restore "./YarpApiGateway.csproj"
 COPY . .
-WORKDIR "/src/."
+WORKDIR "/src/ApiGateways/YarpApiGateway"
 RUN dotnet build "./YarpApiGateway.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
@@ -28,3 +29,8 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "YarpApiGateway.dll"]
+
+# docker build -f "C:\sk\sharedwithvms\repos\EShopMicroservices\src\ApiGateways\YarpApiGateway\Dockerfile" --force-rm -t shiveshk/gateway .
+
+#  docker push shiveshk/gateway
+

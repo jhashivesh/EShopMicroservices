@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: identity-config
+data:
+  ClientApp: http://app.ecommerce.local
+  IssuerUri: http://identity-clusterip

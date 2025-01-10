@@ -3,6 +3,8 @@ using Common.Logging;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Npgsql;
+using Polly;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);

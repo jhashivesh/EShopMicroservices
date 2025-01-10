@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webapp-config
+data:
+  CLIENT_URL: http://app.ecommerce.local
+  IDP_URL: http://identity-clusterip
+  API_URL: http://gateway-clusterip/

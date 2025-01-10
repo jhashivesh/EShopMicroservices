@@ -29,3 +29,9 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Catalog.API.dll"]
+
+
+
+# docker build -f "C:\sk\sharedwithvms\repos\EShopMicroservices\src\Services\Catalog\Catalog.API\Dockerfile" --force-rm -t shiveshk/catalog.api .
+
+#  docker push shiveshk/catalog.api

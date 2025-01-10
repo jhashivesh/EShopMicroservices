@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbit-np
+spec:
+  selector:
+    app: rabbitmq
+  ports:
+    - port: 15672
+      targetPort: 15672
+      nodePort: 30002
+  type: NodePort
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbit-clusterip
+spec:
+  selector:
+    app: rabbitmq
+  ports:
+    - port: 5672
+      targetPort: 5672
+  type: ClusterIP

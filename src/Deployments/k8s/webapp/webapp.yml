@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+  labels:
+    app: webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+        - name: webapp
+          image: shiveshk/webapp:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: CLIENT_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: webapp-config
+                  key: CLIENT_URL
+            - name: IDP_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: webapp-config
+                  key: IDP_URL
+            - name: API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: webapp-config
+                  key: API_URL
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-np
+spec:
+  type: NodePort
+  selector:
+    app: webapp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 31603
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-clusterip
+spec:
+  type: ClusterIP
+  selector:
+    app: webapp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
